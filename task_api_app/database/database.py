@@ -13,6 +13,7 @@ def init_db():
         CREATE TABLE IF NOT EXISTS tasks (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
         title TEXT NOT NULL,
+        status TEXT DEFAULT 'pending',
         priority INTEGER NOT NULL
         )
     ''')

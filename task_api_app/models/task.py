@@ -4,5 +4,5 @@ from dataclasses import dataclass
 class Task:
     id: int = None
     title = str
-    priority: str
+    priority: int
 

@@ -1,20 +1,21 @@
 import logging
 from task_api_app.database.database import get_connection
 
-logging.basicConfig(level=logging.ERROR)
+logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
-def create_task(title, prority):
+def create_task(title, priority):
     conn = None 
     try:
         conn = get_connection()
         cursor = conn.cursor()
-        cursor.execute('INSERT INTO tasks (title, priority) VALUES (?, ?)', (title, prority))
+        cursor.execute('INSERT INTO tasks (title, priority) VALUES (?, ?)', (title, priority))
         conn.commit()
+        logger.info(f"Task created: {title}")
         return {"message": "Task created successfully"}
     
     except Exception as e:
-        logging.error(f"create_task error: {e}")
+        logger.error(f"create_task error: {e}")
         return None
     finally:
         if conn:
@@ -36,7 +37,7 @@ def get_all_tasks():
         return {"message": "Get all tasks successfully"}
 
     except Exception as e:
-        logging.error(f"get_tasks error: {e}")
+        logger.error(f"get_tasks error: {e}")
         return None 
     
     finally:
@@ -50,16 +51,15 @@ def get_task(task_id):
         cursor = conn.cursor()
 
         cursor.execute("SELECT * FROM tasks WHERE id =?", (task_id,))
-        rows = cursor.fetchone()
-     
-        
-        return [dict(row) for row in rows]
+        row = cursor.fetchone()
+        if row:
+            return dict(row)
+        return None
     
-        conn.commit()
-        return {"message": "Task selected successfully"}
+       
 
     except Exception as e:
-        logging.error(f"get_task error: {e}")
+        logger.error(f"get_task error: {e}")
         return None 
     
     finally:
@@ -83,28 +83,54 @@ def update_tasks(task_id, title=None, priority=None):
         return {"message": "Task updated successfully"}
 
     except Exception as e:
-        logging.error(f"update_tasks error: {e}")
+        logger.error(f"update_tasks error: {e}")
         return None 
     
     finally:
         if conn:
             conn.close()
 
-def delete_task(task_id):
+def get_stats():
+    conn = None
+    try:
+        conn = get_connection()
+        cursor = conn.cursor()
+
+        cursor.execute("SELECT COUNT (*) FROM tasks")
+        total = cursor.fetchone()[0]
+
+        cursor.execute("SELECT COUNT (*) FROM tasks WHERE status = 'completed'")
+        completed = cursor.fetchone()[0]
+
+        cursor.execute("SELECT COUNT (*) FROM tasks WHERE status = 'pending'")
+        pending = cursor.fetchone()[0]
+
+        return {"total": total, "completed": completed, "pending": pending}
+
+    except Exception as e:
+        logger.error(f"get_stats error: {e}")
+        return None
+    
+    finally:
+        if conn:
+            conn.close()
+
+
+def delete_task(task_id,):
     conn = None
     try:
         conn = get_connection()
         cursor = conn.cursor()
 
         cursor.execute(
-            "DELETE FROM tasks WHERE id = ?", (task_id)
+            "DELETE FROM tasks WHERE id = ?", (task_id,)
             )
 
         conn.commit()
         return {"message": "Task deleted successfully"}
 
     except Exception as e:
-        logging.error(f"delete_task error: {e}")
+        logger.error(f"delete_task error: {e}")
         return None 
     
     finally:
