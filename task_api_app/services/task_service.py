@@ -80,7 +80,7 @@ def update_tasks(task_id, title=None, priority=None):
         """, (title, priority, task_id))
 
         conn.commit()
-        return {"message": "Task updated successfully"}
+        return {"message": "The Task updated successfully"}
 
     except Exception as e:
         logger.error(f"update_tasks error: {e}")
