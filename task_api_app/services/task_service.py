@@ -12,7 +12,7 @@ def create_task(title, priority):
         cursor.execute('INSERT INTO tasks (title, priority) VALUES (?, ?)', (title, priority))
         conn.commit()
         logger.info(f"Task created: {title}")
-        return {"message": "Task created successfully"}
+        return {"message": "Task_1 created successfully"}
     
     except Exception as e:
         logger.error(f"create_task error: {e}")
