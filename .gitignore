@@ -1,9 +1,51 @@
-__pycache__/
-*.pyc
-*.pyo
-*.pyd
+Task API (FastAPI Project)
 
-venv/
+A simple Task Management REST API built using FastAPI and SQLite. 
+Client → Routes → Services → Database → SQLite
 
-*.db
-*.sqlite3
+Features
+
+- Create tasks
+- Read all tasks
+- Update tasks
+- Delete tasks
+- Health check endpoint
+- Version endpoint
+- Statistics endpoint (total, completed, pending tasks)
+
+installation 
+git clone <your-repo-url> 
+cd task_api
+
+# Venv
+python -m venv venv
+source venv/bin/activate   # Windows
+
+# dependancies
+pip install fastapi uvicorn python-dotenv
+
+pip install -r requirements.txt
+pip install python-dotenv
+
+
+database 
+Create a `.env` file:
+DATABASE_NAME=tasks.db
+Load it in Python:
+
+Run 
+uvicorn main:app --reload
+
+# pytest installation
+pip install pytest
+pytest --version
+pip install httpx
+
+# Running Tests 
+pytest
+
+#Recommended
+python -m pytest
+
+To set PYTHONPATH to the current folder (.):
+$env:PYTHONPATH="."

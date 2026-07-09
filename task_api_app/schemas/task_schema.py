@@ -5,7 +5,7 @@ class TaskCreate(BaseModel):
     priority: int
 
 class TaskUpdate(BaseModel):
-    id: int
+    
     title: str
     priority: int
     

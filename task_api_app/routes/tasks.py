@@ -1,6 +1,6 @@
-from fastapi import APIRouter, HTTPException
+from fastapi import APIRouter, HTTPException 
 from task_api_app.schemas.task_schema import TaskCreate, TaskUpdate
-from task_api_app.services.task_service import create_task, get_all_tasks, get_task, update_tasks, delete_task, get_stats
+from task_api_app.services.task_service import create_task, get_all_tasks, get_task, update_tasks, delete_task, get_stats, completed_task
 
 router = APIRouter()
 
@@ -29,3 +29,8 @@ def stats():
 @router.delete("/tasks/{task_id}")
 def remove_task(task_id:int):
     return delete_task(task_id)
+
+@router.get("/completed")
+def finished_task():
+    return completed_task()
+

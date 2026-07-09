@@ -12,7 +12,7 @@ def create_task(title, priority):
         cursor.execute('INSERT INTO tasks (title, priority) VALUES (?, ?)', (title, priority))
         conn.commit()
         logger.info(f"Task created: {title}")
-        return {"message": "Task_1 created successfully"}
+        return {"message": "Task created successfully"}
     
     except Exception as e:
         logger.error(f"create_task error: {e}")
@@ -33,8 +33,7 @@ def get_all_tasks():
         
         return [dict(row) for row in rows]
     
-        conn.commit()
-        return {"message": "Get all tasks successfully"}
+        
 
     except Exception as e:
         logger.error(f"get_tasks error: {e}")
@@ -80,7 +79,7 @@ def update_tasks(task_id, title=None, priority=None):
         """, (title, priority, task_id))
 
         conn.commit()
-        return {"message": "The Task updated successfully"}
+        return {"message": "Task updated successfully"}
 
     except Exception as e:
         logger.error(f"update_tasks error: {e}")
@@ -123,7 +122,7 @@ def delete_task(task_id,):
         cursor = conn.cursor()
 
         cursor.execute(
-            "DELETE FROM tasks WHERE id = ?", (task_id,)
+            "DELETE  FROM tasks WHERE id = ?", (task_id,)
             )
 
         conn.commit()
@@ -131,6 +130,29 @@ def delete_task(task_id,):
 
     except Exception as e:
         logger.error(f"delete_task error: {e}")
+        return None 
+    
+    finally:
+        if conn:
+            conn.close()
+
+def completed_task():
+    conn = None
+    try:
+        conn = get_connection()
+        cursor = conn.cursor()
+
+        cursor.execute(
+            "SELECT * FROM tasks WHERE status = ?", ("completed",)
+            )
+        rows = cursor.fetchall()
+
+        return [dict(row) for row in rows]
+
+        
+
+    except Exception as e:
+        logger.error(f"colmpleted_task error: {e}")
         return None 
     
     finally:
